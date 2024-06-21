@@ -129,7 +129,7 @@ env.bak/
 venv.bak/
 notebooks/
 tmp/
-static/
+
 
 # Spyder project settings
 .spyderproject
