@@ -13,7 +13,14 @@ selected_positions = []
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('home+.html')
+
+@app.route('/classification')
+def classification():
+    return render_template('classification.html')
+@app.route('/generator')
+def generator():
+    return render_template('generator.html')
 
 @app.route('/api/save-positions', methods=['POST'])
 def save_positions():
@@ -64,4 +71,4 @@ def get_prediction():
     return render_template('index.html', pred=grade_output)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True, port = 5007)
