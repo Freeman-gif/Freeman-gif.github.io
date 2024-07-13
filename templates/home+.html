@@ -15,27 +15,6 @@ body, html {height: 100%}
   background-position: center;
   background-size: cover;
 }
-.grid-item {
-  position: absolute;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-.non-selectable {
-  pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.2);
-}
-.moonboard-image {
-  width: 100%;
-  height: auto;
-  position: relative;
-}
-.grid-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 </style>
 </head>
 <body>
@@ -48,8 +27,8 @@ body, html {height: 100%}
     <p><a href="{{ url_for('classification') }}" class="w3-button w3-black">Classification</a></p>
     <p><a href="{{ url_for('generator') }}" class="w3-button w3-black">Generator</a></p>
     <p><button onclick="document.getElementById('About').style.display='block'" class="w3-button w3-black">About</button></p>
-    <p><button onclick="document.getElementById('classification1').style.display='block'" class="w3-button w3-black">Classification1</button></p>
   </div>
+
   <div class="w3-display-bottomleft w3-container">
     <p class="w3-xlarge">linkedIn</p>
     <p class="w3-large">San Francisco</p>
@@ -57,106 +36,37 @@ body, html {height: 100%}
   </div>
 </div>
 
-<div id="classification1" class="w3-modal">
-  <div class="w3-modal-content w3-animate-zoom">
-    <div class="w3-container w3-black">
-      <span onclick="document.getElementById('classification1').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
-      <h1>Classification1</h1>
-    </div>
-    <div class="w3-container">
-      <h2>Predicted grade: {{ pred }}</h2> 
-      <div class="image-container">
-        <img src="{{ url_for('static', filename='moonboard2016Background.jpg') }}" alt="MoonBoard" class="moonboard-image">
-        <div class="grid-container" id="grid-container">
-          <!-- Grid items will be added dynamically by JavaScript -->
-        </div>
-      </div>
-      <button onclick="exportPositions()" style="margin-top: 20px;">Export Positions</button>
-    </div>
-  </div>
-</div>
 
-<script>
-  const rows = 18;
-  const cols = 11;
-  const gridContainer = document.getElementById('grid-container');
-  const matrix = Array.from({ length: rows }, (_, rowIndex) => 
-    Array.from({ length: cols }, (_, colIndex) => ({
-      selected: false,
-      selectable: !(
-        (rowIndex === 0 && colIndex === 9) ||  
-        (rowIndex === 0 && colIndex === 5) ||
-        (rowIndex === 1 && colIndex === 0) ||
-        (rowIndex === 1 && colIndex === 1) ||
-        // Add other conditions as necessary
-        (rowIndex === 17 && colIndex === 10)
-      )
-    }))
-  );
 
-  const selectedPositions = [];
 
-  function handleCellClick(rowIndex, colIndex) {
-    if (!matrix[rowIndex][colIndex].selectable) return;
 
-    const totalSelected = selectedPositions.length;
-    const isCurrentlySelected = matrix[rowIndex][colIndex].selected;
 
-    if (!isCurrentlySelected && totalSelected >= 15) {
-      alert('Maximum of 15 positions can be selected.');
-      return;
-    }
 
-    if (isCurrentlySelected) {
-      matrix[rowIndex][colIndex].selected = false;
-      const cell = document.getElementById(`cell-${rowIndex}-${colIndex}`);
-      cell.style.backgroundColor = 'transparent';
-      const index = selectedPositions.findIndex(pos => pos.row === rowIndex && pos.col === colIndex);
-      if (index !== -1) selectedPositions.splice(index, 1);
-    } else {
-      matrix[rowIndex][colIndex].selected = true;
-      const cell = document.getElementById(`cell-${rowIndex}-${colIndex}`);
-      cell.style.backgroundColor = totalSelected === 0 ? 'green' : (totalSelected === 14 ? 'red' : 'blue');
-      selectedPositions.push({ row: rowIndex, col: colIndex });
-    }
-  }
 
-  function exportPositions() {
-    if (selectedPositions.length < 4) {
-      alert('Minimum of 4 positions must be selected.');
-      return;
-    }
 
-    const lastPosition = selectedPositions[selectedPositions.length - 1];
-    if (lastPosition.row !== 0) {
-      alert('Last selected position must be in the top row.');
-      return;
-    }
 
-    axios.post('/api/save-positions', selectedPositions)
-      .then(response => {
-        const gradeOutput = response.data.prediction;
-        window.location.href = `/prediction?grade=${gradeOutput}`;
-      })
-      .catch(error => {
-        console.error('Error saving positions:', error);
-      });
-  }
 
-  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
-    for (let colIndex = 0; colIndex < cols; colIndex++) {
-      const cell = document.createElement('div');
-      cell.id = `cell-${rowIndex}-${colIndex}`;
-      cell.className = `grid-item ${matrix[rowIndex][colIndex].selectable ? '' : 'non-selectable'}`;
-      cell.style.top = `${(rowIndex / rows) * 100}%`;
-      cell.style.left = `${(colIndex / cols) * 100}%`;
-      cell.style.width = '9%'; // Adjust this value as needed
-      cell.style.height = '5.5%'; // Adjust this value as needed
-      cell.onclick = () => handleCellClick(rowIndex, colIndex);
-      gridContainer.appendChild(cell);
-    }
-  }
-</script>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div id="About" class="w3-modal">
   <div class="w3-modal-content w3-animate-zoom">
@@ -166,10 +76,12 @@ body, html {height: 100%}
     </div>
     <div class="w3-container">
       <p>About this project</p>
-      <p>Welcome to MoonBoard AI Click the generator button then choose a difficulty, a climbing route of that difficulty will be created. To create a climb choose classification, create a route by clicking on holds and our app will classify the grade.</p>
+      <p>Welcome to 'name_here' Click the generator button then choose a difficulty, a climbing route of that difficulty will be created. To create a climb choose classification, create a route by clicking on holds and our app will classify the grade. </p>
+
     </div>
   </div>
 </div>
 
 </body>
 </html>
+
