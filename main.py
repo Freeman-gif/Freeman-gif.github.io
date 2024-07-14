@@ -71,4 +71,4 @@ def get_prediction():
     return render_template('classification.html', pred=grade_output)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port = 5009)
+    app.run(host='0.0.0.0', debug=True, port = 5005)
