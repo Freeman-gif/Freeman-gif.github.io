@@ -42,12 +42,35 @@
             text-align: center;
             font-size: 75px;
         }
+        .constraints {
+            position: absolute;
+            top: 310px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            width: 250px; /* Adjust width as needed */
+        }
+
+        .constraints ul {
+            list-style-type: disc;
+            padding-left: 20px; /* Adjust padding for list items */
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <h1 class="title"> Moonboard AI </h1>
+    <div class="constraints">
+        <p>Constraints:</p>
+        <ul>
+            <li>15 hold maximum</li>
+            <li>3 hold minimum</li>
+            <li>Climb must end at the top row</li>
+        </ul>
+    </div>
     <div class="matrix-container">
-        <button onclick="exportPositions()" class="export-button">Export Positions</button>
+        <button onclick="exportPositions()" class="export-button">Grade Climb</button>
         <div class="predicted-grade">Predicted grade: {{ pred }}</div>
         <div class="image-container">
             <img src="{{ url_for('static', filename='moonboard2016Background.jpg') }}" alt="MoonBoard" class="moonboard-image">

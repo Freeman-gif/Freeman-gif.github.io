@@ -37,8 +37,8 @@
     <p class="logo-text">Climb AI</p>
   </div>
   <div class="w3-display-topleft w3-container w3-xlarge">
-    <p><a href="{{ url_for('classification') }}" class="w3-button w3-black">Classification</a></p>
-    <p><a href="{{ url_for('generator') }}" class="w3-button w3-black">Generator</a></p>
+    <p><a href="{{ url_for('classification') }}" class="w3-button w3-black">Grade Classifier</a></p>
+    <p><a href="{{ url_for('generator') }}" class="w3-button w3-black">Climb Generator</a></p>
     <p><button onclick="document.getElementById('About').style.display='block'" class="w3-button w3-black">About</button></p>
   </div>
 
@@ -57,7 +57,12 @@
     </div>
     <div class="w3-container">
       <p>About this project</p>
-      <p>Welcome to 'MoonboardAI'. Click the generator button, then choose a difficulty. A climbing route of that difficulty will be created. To create a climb, choose classification, create a route by clicking on holds, and our app will classify the grade.</p>
+      <p>
+        Welcome to MoonboardAI. Choose either the generator or classifier tool. 
+        The classifier will allow you to create your own customizable route and then rate its difficulty. 
+        Our generator tool will allow you to generate new climbs based on a set difficulty.
+        You can use this tool to help set and get inspiration to create your own moon board climbs.
+      </p>
     </div>
   </div>
 </div>

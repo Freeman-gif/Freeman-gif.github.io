@@ -24,19 +24,19 @@ class ClimbGenerator:
         holds = list(prob_starting_hold.keys())
         probabilites = list(prob_starting_hold.values())
         return str(np.random.choice(holds, p=probabilites))
-    
+
     def _sample_second_starting_hold(self, hold, prob_with_pairs, conditional_second_starting_holds_info):
         if np.random.rand() < prob_with_pairs.get(hold, 0):
             second_holds = list(conditional_second_starting_holds_info[hold].keys())
             second_probabilities = list(conditional_second_starting_holds_info[hold].values())
             return np.random.choice(second_holds, p=second_probabilities)
-        return None 
-    
+        return None
+
     def _sample_next_hold(self, current_hold, probability_matrix):
         next_holds = probability_matrix.columns
         probabilities = probability_matrix.loc[current_hold]
         return np.random.choice(next_holds, p=probabilities)
-    
+
     def _hold_indexer(self, hold_value):
         letter_dict = {
             'A': 0, 'B': 1, 'C':2, 'D': 3,
@@ -48,19 +48,19 @@ class ClimbGenerator:
 
         index = row * 11 + col
 
-        return index 
+        return index
 
-    def generate_climb(self):#, prob_starting_hold, prob_with_pairs, conditional_second_starting_holds_info, probability_matrix):
+    def generate_climb(self):  #, prob_starting_hold, prob_with_pairs, conditional_second_starting_holds_info, probability_matrix):
         climb = []
         labels = []
 
         # Sample the first starting hold
-        first_hold = self._sample_starting_hold(self.start_probs)#prob_starting_hold)
+        first_hold = self._sample_starting_hold(self.start_probs)  # prob_starting_hold)
         climb.append(first_hold)
         labels.append('starting hold')
 
         # Determine if there's a second starting hold
-        second_hold = self._sample_second_starting_hold(first_hold, self.pair_probs, self.cond_probs)#prob_with_pairs, conditional_second_starting_holds_info)
+        second_hold = self._sample_second_starting_hold(first_hold, self.pair_probs, self.cond_probs)  # prob_with_pairs, conditional_second_starting_holds_info)
         if second_hold:
             climb.append(second_hold)
             labels.append('starting hold')
@@ -70,7 +70,7 @@ class ClimbGenerator:
 
         # Generate the rest of the climb
         while current_row < 18:
-            next_hold = self._sample_next_hold(current_hold, self.prob_matrix)#probability_matrix)
+            next_hold = self._sample_next_hold(current_hold, self.prob_matrix)  # probability_matrix)
             climb.append(next_hold)
             labels.append('intermediate hold')
             current_hold = next_hold
@@ -84,8 +84,9 @@ class ClimbGenerator:
 
         for i in climb_idxs:
             climb_vector[i] += 1
-         
+
         return climb, labels, climb_vector
+
 
 if __name__ == '__main__':
     generator = ClimbGenerator('hard')

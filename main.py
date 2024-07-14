@@ -12,13 +12,17 @@ app = Flask(__name__, template_folder='templates')
 CORS(app)
 selected_positions = []
 
+
 @app.route('/')
 def index():
     return render_template('home+.html')
 
+
 @app.route('/classification')
 def classification():
     return render_template('classification.html')
+
+
 @app.route('/generator')
 def generator():
     input_grade = request.args.get('grade')
@@ -26,7 +30,8 @@ def generator():
         'V4': 'easy', 'V5': 'easy',
         'V6': 'medium', 'V7': 'medium',
         'V8': 'hard', 'V9': 'hard',
-        'V10': 'very_hard', 'V10+':'very_hard', 'V11': 'very_hard', 'V12': 'very_hard', 'V13': 'very_hard'
+        'V10': 'very_hard', 'V10+': 'very_hard', 'V11':
+        'very_hard', 'V12': 'very_hard', 'V13': 'very_hard'
     }
 
     level = grade_to_level[input_grade]
@@ -63,13 +68,12 @@ def save_positions():
         col = coord_dict['col']
         idx = ((18 - row - 1)*11) + (col)
         indices.append(idx)
-    
+
     position_ohe = np.zeros(198)
     for idx in indices: 
         position_ohe[idx] += 1
-    
-    model_input = torch.tensor(position_ohe).to(torch.float32).flatten() 
 
+    model_input = torch.tensor(position_ohe).to(torch.float32).flatten() 
 
     model = ClimbNet()
     weights_filepath = "src/climbnet_weights.pth"
@@ -81,22 +85,25 @@ def save_positions():
     hard_pred = int(soft_pred.argmax())
     out_conv = OutputConversion()
     grade_output = out_conv.convert(hard_pred)
-    #print('Received positions:', selected_positions)
-    #print(position_ohe)
+    # print('Received positions:', selected_positions)
+    # print(position_ohe)
     print(grade_output)
 
-    return render_template('classification.html', pred=grade_output)# jsonify({'prediction': grade_output}) #
-    #return jsonify({'status': 'success', 'data': selected_positions})
+    return render_template('classification.html', pred=grade_output)  # jsonify({'prediction': grade_output}) #
+    # return jsonify({'status': 'success', 'data': selected_positions})
+
 
 @app.route('/api/get-positions', methods=['GET'])
 def get_positions():
     global selected_positions
     return jsonify({'status': 'success', 'data': selected_positions})
 
+
 @app.route('/prediction')
 def get_prediction():
     global grade_output
     return render_template('classification.html', pred=grade_output)
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port = 5005)
+    app.run(host='0.0.0.0', debug=True, port=5005)
