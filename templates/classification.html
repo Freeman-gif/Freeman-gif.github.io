@@ -6,19 +6,57 @@
     <title>MoonBoard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .predicted-grade {
+            margin-top: 20px;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .export-button {
+        display: block;
+        margin: 0 auto;
+        margin-top: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        background-color: #bfbf20; /* Customize the button color as needed */
+        color: white;
+        cursor: pointer;
+        }
+
+        .export-button:hover {
+            background-color: #bfbf20; /* Customize the hover color as needed */
+        }
+        .title {
+            text-align: center;
+            font-size: 75px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Predicted grade: {{ pred }}</h2> 
+    <h1 class="title"> Moonboard AI </h1>
     <div class="matrix-container">
+        <button onclick="exportPositions()" class="export-button">Export Positions</button>
+        <div class="predicted-grade">Predicted grade: {{ pred }}</div>
         <div class="image-container">
             <img src="{{ url_for('static', filename='moonboard2016Background.jpg') }}" alt="MoonBoard" class="moonboard-image">
             <div class="grid-container" id="grid-container">
                 <!-- Grid items will be added dynamically by JavaScript -->
             </div>
         </div>
-        <button onclick="exportPositions()" style="margin-top: 20px;">Export Positions</button>
     </div>
-    
+        
     <script>
         const rows = 18;
         const cols = 11;
