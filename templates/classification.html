@@ -8,11 +8,28 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
-            background-color: black;
-            color: white;
+            background-color: rgb(255, 255, 255);
+            color: #2e3338;
             font-family: Arial, sans-serif;
         }
-        
+
+        .nav-buttons {
+            position: absolute;
+            top: 20px; /* Adjust this value to increase/decrease space from the top */
+            left: 20px; /* Space from the left edge */
+            font-size: 20px;
+        }
+
+        .nav-buttons a {
+            background-color: #ffffff; /* Button color */
+            color: #2e3338;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 5px; /* Space between buttons */
+        }
+
         .predicted-grade {
             margin-top: 20px;
             margin-bottom: 25px;
@@ -20,6 +37,7 @@
             font-weight: bold;
             text-align: center;
         }
+
         .export-button {
         display: block;
         margin: 0 auto;
@@ -30,18 +48,27 @@
         text-align: center;
         border: none;
         border-radius: 5px;
-        background-color: #bfbf20; /* Customize the button color as needed */
+        background-color: #d5d522; /* Customize the button color as needed */
         color: white;
         cursor: pointer;
         }
 
         .export-button:hover {
-            background-color: #bfbf20; /* Customize the hover color as needed */
+            background-color: #d5d522; /* Customize the hover color as needed */
         }
+
         .title {
+            margin-bottom: -20px;
+            margin-top: 100px;
             text-align: center;
             font-size: 75px;
         }
+
+        .subtitle {
+            text-align: center;
+            font-size: 20px;
+        }
+
         .constraints {
             position: absolute;
             font-weight: bold;
@@ -62,15 +89,21 @@
     </style>
 </head>
 <body>
+
+    <div class="nav-buttons">
+        <a class="button" href="{{ url_for('index') }}">Home</a>
+        <a class="button" href="{{ url_for('generator') }}">Generator</a>
+    </div>
     <h1 class="title"> Moonboard AI </h1>
-    <div class="constraints">
+    <h4 class="subtitle"> Click on the holds to create a climb</h4>
+    <!-- <div class="constraints">
         <p>Constraints:</p>
         <ul>
             <li>15 hold maximum</li>
             <li>3 hold minimum</li>
             <li>Climb must end at the top row</li>
         </ul>
-    </div>
+    </div> -->
     <div class="matrix-container">
         <button onclick="exportPositions()" class="export-button">Grade Climb</button>
         <div class="predicted-grade">Predicted grade: {{ pred }}</div>
