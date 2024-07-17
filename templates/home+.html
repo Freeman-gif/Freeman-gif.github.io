@@ -13,58 +13,81 @@
     }
     body, html {
       height: 100%;
+      margin: 0;
     }
     .bgimg {
-      background-color: black;
+      background-color: rgb(255, 255, 255);
       min-height: 100%;
       background-position: center;
       background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 20px; /* Adjust padding to control space at the top */
     }
     .logo-text {
       font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
       font-size: 60px;
-      color: yellow;
+      color: rgb(226, 226, 51);
+      margin-bottom: px;
+      text-align: center;
     }
     .black-and-white {
-      color: white;
+      color: #2e3338;
+    }
+    .w3-button-custom {
+      background-color: rgb(226, 226, 51); /* Yellow */
+      color: #2b2f33; /* Black text */
+      font-size: 18px;
+      padding: 15px 30px;
+      text-align: center;
+      border: none;
+      text-decoration: none;
+    }
+    .centered-text-container {
+      width: 50%;
+      margin: 0 auto;
+      text-align: center;
+      margin-bottom: 200px; /* Reduced margin to push content up */
+    }
+    .centered-text {
+      font-size: 18px;
+      color: #2e3338; /* Black text */
+      margin: 20px 0;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 50px; /* Reduced margin for buttons */
     }
   </style>
 </head>
 <body>
 
 <div class="bgimg w3-display-container w3-text-yellow">
-  <div class="w3-display-middle w3-jumbo">
-    <p class="logo-text">Climb AI</p>
-  </div>
-  <div class="w3-display-topleft w3-container w3-xlarge">
-    <p><a href="{{ url_for('classification') }}" class="w3-button w3-black">Grade Classifier</a></p>
-    <p><a href="{{ url_for('generator') }}" class="w3-button w3-black">Climb Generator</a></p>
-    <p><button onclick="document.getElementById('About').style.display='block'" class="w3-button w3-black">About</button></p>
+  <div class="w3-container w3-center">
+    <p class="logo-text">Moonboard AI</p>
+
+    <div class="centered-text-container">
+      <p class="centered-text">
+        Welcome to MoonboardAI. Choose either the generator or classifier tool. 
+        The classifier will allow you to create your own customizable route and then rate its difficulty. 
+        Our generator tool will allow you to generate new climbs based on a set difficulty.
+        You can use this tool to help set moonboard climbs, and suggest accurate grades.
+      </p>
+      <div class="button-container">
+        <a href="{{ url_for('classification') }}" class="w3-button w3-button-custom w3-margin-right">Grade Classifier</a>
+        <a href="{{ url_for('generator') }}" class="w3-button w3-button-custom">Climb Generator</a>
+      </div>
+    </div>
   </div>
 
   <div class="w3-display-bottomleft w3-container black-and-white">
     <p class="w3-xlarge">linkedIn</p>
     <p class="w3-large">San Francisco</p>
-    <p>powered by <a href="" target="_blank" style="color: white;">local jobless students</a></p>
+    <p>powered by <a href="" target="_blank" style="color: rgb(0, 0, 0);">local jobless students</a></p>
   </div>
-</div>
 
-<div id="About" class="w3-modal">
-  <div class="w3-modal-content w3-animate-zoom">
-    <div class="w3-container w3-black">
-      <span onclick="document.getElementById('About').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
-      <h1>About</h1>
-    </div>
-    <div class="w3-container">
-      <p>About this project</p>
-      <p>
-        Welcome to MoonboardAI. Choose either the generator or classifier tool. 
-        The classifier will allow you to create your own customizable route and then rate its difficulty. 
-        Our generator tool will allow you to generate new climbs based on a set difficulty.
-        You can use this tool to help set and get inspiration to create your own moon board climbs.
-      </p>
-    </div>
-  </div>
 </div>
 
 </body>
