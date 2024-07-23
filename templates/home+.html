@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
   <style>
+    /* Existing styles */
     body, h1, h5 {
       font-family: "Raleway", sans-serif;
     }
@@ -38,7 +39,7 @@
     }
     .w3-button-custom {
       background-color: rgb(226, 226, 51); /* Yellow */
-      color: #2b2f33; /* Black text */
+      color: #2b2f33; 
       font-size: 18px;
       font-weight: bold;
       padding: 15px 30px;
@@ -54,8 +55,11 @@
     }
     .centered-text {
       font-size: 18px;
-      color: #2e3338; /* Black text */
+      color: #2e3338; 
       margin: 20px 0;
+    }
+    .bullet-text {
+      color: #2e3338; 
     }
     .button-container {
       text-align: center;
@@ -71,10 +75,11 @@
 
     <div class="centered-text-container">
       <p class="centered-text">
-        Welcome to MoonboardAI. Choose either the generator or classifier tool. 
-        The classifier will allow you to create your own customizable route and then rate its difficulty. 
-        Our generator tool will allow you to generate new climbs based on a set difficulty.
-        You can use this tool to help set moonboard climbs, and suggest accurate grades.
+        Welcome to MoonboardAI. 
+        <li class="bullet-text">Choose either the generator or classifier tool.</li>
+        <li class="bullet-text">The classifier will allow you to create your own customizable route and then rate its difficulty.</li>
+        <li class="bullet-text">Our generator tool will allow you to generate new climbs based on a set difficulty.</li>
+        <li class="bullet-text">You can use this tool to help set moonboard climbs, and suggest accurate grades.</li>
       </p>
       <div class="button-container">
         <a href="{{ url_for('classification') }}" class="w3-button w3-button-custom w3-margin-right">Grade Classifier</a>
