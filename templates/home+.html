@@ -17,7 +17,7 @@
       margin: 0;
     }
     .bgimg {
-      background-color: rgb(255, 255, 255);
+      background-color: #F5F7F8;
       min-height: 100%;
       background-position: center;
       background-size: cover;
@@ -30,7 +30,7 @@
       font-family: 'Orbitron', sans-serif;
       font-weight: bold;
       font-size: 60px;
-      color: rgb(226, 226, 51);
+      color: #d5d522;
       margin-bottom: px;
       text-align: center;
     }
@@ -54,12 +54,14 @@
       margin-bottom: 200px; /* Reduced margin to push content up */
     }
     .centered-text {
-      font-size: 18px;
+      font-size: 25px;
+      font-weight: bold;
       color: #2e3338; 
       margin: 20px 0;
     }
     .bullet-text {
       color: #2e3338; 
+      font-size: 16px;
     }
     .button-container {
       text-align: center;
@@ -79,7 +81,7 @@
         <li class="bullet-text">Choose either the generator or classifier tool.</li>
         <li class="bullet-text">The classifier will allow you to create your own customizable route and then rate its difficulty.</li>
         <li class="bullet-text">Our generator tool will allow you to generate new climbs based on a set difficulty.</li>
-        <li class="bullet-text">You can use this tool to help set moonboard climbs, and suggest accurate grades.</li>
+        <li class="bullet-text">You can use this tool to help set moonboard climbs and suggest accurate grades.</li>
       </p>
       <div class="button-container">
         <a href="{{ url_for('classification') }}" class="w3-button w3-button-custom w3-margin-right">Grade Classifier</a>
