@@ -9,12 +9,30 @@
 </head>
 <body>
     <h2>Generator</h2>
-    <p>holds: {{ climb }}</p>
+    <p>Selected Grade: {{ grade or 'No grade selected' }}</p>
+    <p>Vector: {{ vec }}</p>
+    <form method="POST">
+        <select name="grade_dropdown">
+        <option value="V4">V4</option>
+        <option value="V5">V5</option>
+        <option value="V6">V6</option>
+        <option value="V7">V7</option>
+        <option value="V8">V8</option>
+        <option value="V9">V9</option>
+        <option value="V10">V10</option>
+        <option value="V10+">V10+</option>
+        <option value="V11">V11</option>
+        <option value="V12">V12</option>
+        <option value="V13">V13</option>
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+    <!--<p>holds: {{ climb }}</p>
     <br>
     <p>labels: {{ labels }}</p>
     <br>
     <p>vector: {{ vector }}</p>
     <br>
-    <p>grade: {{ grade }}</p>
+    <p>grade: {{ grade }}</p>-->
 </body>
 </html>
