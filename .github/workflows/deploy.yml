@@ -26,5 +26,5 @@ jobs:
 
     - name: Deploy to App Engine
       run: |
-        cd /home/runner/work/Freeman-gif.github.io/Freeman-gif.github.io
+        cd /home/runner/work/Freeman-gif.github.io/ClimbAI
         gcloud app deploy
