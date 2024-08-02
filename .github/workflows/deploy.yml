@@ -13,10 +13,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11.4'  
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v0.4.0
       with:
@@ -32,13 +28,3 @@ jobs:
       run: |
         cd /home/runner/work/Freeman-gif.github.io/Freeman-gif.github.io
         gcloud app deploy
-
-
-
-
-
-
-
-
-
-
