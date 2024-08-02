@@ -83,7 +83,7 @@ def generator():
             image = plot_generated_climb(climb,labels)
             
             
-    return render_template('generator.html', grade=input_grade, vec=selected_cells,img_path=image)#)input_grade=input_grade)
+    return render_template('generator+.html', grade=input_grade, vec=selected_cells,img_path=image)#)input_grade=input_grade)
 
 
 
@@ -120,7 +120,7 @@ def plot_generated_climb(climb, labels, img_path='static/generate.jpeg'):
         nx.draw_networkx_nodes(G, pos, nodelist=[hold], ax=ax, node_size=600, node_color='none', edgecolors=color, linewidths=2.5)
         # nx.draw_networkx_nodes(G, pos, nodelist=[hold], ax=ax, node_size=600, node_color=color, edgecolors='none', linewidths=2.5, alpha=0.5)
     output_image_path = 'static/generated_climb.png'
-    plt.savefig('static/generated_climb.png')  # Save the image to a file
+    plt.savefig('static/generated_climb.png', transparent=True, bbox_inches='tight')  # Save the image to a file
     plt.close()
     return output_image_path
 
