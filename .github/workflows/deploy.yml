@@ -34,8 +34,6 @@ jobs:
         gcloud app deploy
 
 
-Message Max Sivolella
-
 
 
 
