@@ -21,9 +21,6 @@
         <option value="V9">V9</option>
         <option value="V10">V10</option>
         <option value="V10+">V10+</option>
-        <option value="V11">V11</option>
-        <option value="V12">V12</option>
-        <option value="V13">V13</option>
         </select>
         <input type="submit" value="Submit">
     </form>
@@ -34,5 +31,9 @@
     <p>vector: {{ vector }}</p>
     <br>
     <p>grade: {{ grade }}</p>-->
+    {% if img_path %}
+    <h3>Generated Climb:</h3>
+    <img src="{{ img_path }}" alt="Generated Climb">
+    {% endif %}
 </body>
 </html>
