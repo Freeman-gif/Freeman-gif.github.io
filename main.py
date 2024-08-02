@@ -1,6 +1,3 @@
-import matplotlib
-matplotlib.use('Agg') 
-import logging
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
@@ -9,9 +6,7 @@ from dotenv import load_dotenv
 from src.model import ClimbNet
 from src.generator import ClimbGenerator
 from src.utils import OutputConversion
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-import networkx as nx
+
 load_dotenv()
 app = Flask(__name__, template_folder='templates')
 CORS(app)
@@ -26,6 +21,7 @@ def index():
 @app.route('/classification')
 def classification():
     return render_template('classification.html')
+
 
 @app.route('/generator', methods=['GET', 'POST'])
 def generator():
@@ -80,49 +76,10 @@ def generator():
                     col = idx % 11
                     label = f'{x_labels[col]}{y_labels[row]}'
                     selected_cells.append(label)
-            image = plot_generated_climb(climb,labels)
+        
             
             
     return render_template('generator+.html', grade=input_grade, vec=selected_cells,img_path=image)#)input_grade=input_grade)
-
-
-
-
-
-
-def plot_generated_climb(climb, labels, img_path='static/generate.jpeg'):
-    
-    h_incpt = 93.3
-    h_scalar = 50
-    v_incpt = 63.5
-    v_scalar = 50
-    holds = []
-    for row in range(18):
-        for col in range(11):
-            hold_id = f"{chr(65 + col)}{row + 1}"
-            x = h_incpt + h_scalar * col
-            y = v_incpt + v_scalar * row
-            holds.append({"id": hold_id, "x": x, "y": y})
-    G = nx.Graph()
-    for hold in holds:
-        G.add_node(hold['id'], pos=(hold['x'], hold['y']))
-    
-    wall_img = mpimg.imread(img_path)
-    fig, ax = plt.subplots(figsize=(15, 10))
-    ax.imshow(wall_img, extent=[0, wall_img.shape[1], 0, wall_img.shape[0]])
-    # Get positions of holds
-    pos = {hold['id']: (hold['x'], hold['y']) for hold in holds}
-    # Highlight the generated climb
-
-    for hold, label in zip(climb, labels):
-        print(climb, labels)
-        color = 'green' if label == 'starting hold' else ('blue' if label == 'intermediate hold' else 'red')
-        nx.draw_networkx_nodes(G, pos, nodelist=[hold], ax=ax, node_size=600, node_color='none', edgecolors=color, linewidths=2.5)
-        # nx.draw_networkx_nodes(G, pos, nodelist=[hold], ax=ax, node_size=600, node_color=color, edgecolors='none', linewidths=2.5, alpha=0.5)
-    output_image_path = 'static/generated_climb.png'
-    plt.savefig('static/generated_climb.png', transparent=True, bbox_inches='tight')  # Save the image to a file
-    plt.close()
-    return output_image_path
 
 
 
