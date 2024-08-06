@@ -7,13 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
             background-color: #F5F7F8;
             color: #45474B;
             font-family: Arial, sans-serif;
         }
-
+        .image-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 50px; /* Adjust this value to move the container to the right */
+          }
         .nav-buttons {
             position: absolute;
             top: 20px; /* Adjust this value to increase/decrease space from the top */
@@ -41,18 +48,18 @@
         }
 
         .export-button {
-        display: block;
-        margin: 0 auto;
-        margin-top: 25px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        text-align: center;
-        border: none;
-        border-radius: 5px;
-        background-color:#45474B;/* Customize the button color as needed */
-        color: #F5F7F8;
-        cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            margin-top: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            background-color:#45474B;/* Customize the button color as needed */
+            color: #F5F7F8;
+            cursor: pointer;
         }
 
         .export-button:hover {
@@ -91,39 +98,135 @@
             padding-left: 20px; /* Adjust padding for list items */
             margin: 0;
         }
-    </style>
-</head>
-<body>
 
-    <div class="nav-buttons">
-        <a class="button" href="{{ url_for('index') }}">Home</a>
-        <a class="button" href="{{ url_for('classification') }}">Classification</a>
-    </div>
-    <h1 class="title"> Moonboard AI </h1>
-    <h4 class="subtitle"> Select grade to generate a climb</h4>
-    <h2>Generator</h2>
-    <p>Selected Grade: {{ grade or 'No grade selected' }}</p>
-    <form id="gradeForm" method="POST">
-        <select name="grade_dropdown">
-        <option value="" disabled selected>Select a grade</option> 
-        <option value="V4">V4</option>
-        <option value="V5">V5</option>
-        <option value="V6">V6</option>
-        <option value="V7">V7</option>
-        <option value="V8">V8</option>
-        <option value="V9">V9</option>
-        <option value="V10">V10</option>
-        <option value="V10+">V10+</option>
-        </select>
-        <button type="button" onclick="submitForm()" class="export-button">Generate Climb</button>
-    </form>
-    {% if img_path %}
-    <img src="{{ img_path }}" alt="Generated Climb">
-    {% endif %}
-    <script>
-        function submitForm() {
-            document.getElementById('gradeForm').submit();
+        .matrix-container {
+            display: flex;
+            background-color: transparent;
+            flex-direction: column;
+            height: 100vh; /* Full height of the viewport */
+          }
+        .grid-container {
+            position: absolute;
+            background-color: transparent;
+            border: 1px solid transparent;
+            top: 1;
+            left: 1;
+            width: 675px; /* Match the width of the image */
+            height: 1100px; /* Match the height of the image */
+            display: grid;
+            grid-template-rows: repeat(18, 1fr);
+            grid-template-columns: repeat(11, 1fr);
+            margin-left: 65px;
+            margin-top: 25px;
+          
+          }
+
+          .grid-item {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: 1px solid transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
-    </script>
-</body>
-</html>
+
+        .highlight-start {
+            border: 2px solid green;
+            background-color: transparent; /* No filling */
+            border-radius: 50%;
+        }
+    
+        .highlight-intermediate {
+            border: 2px solid blue;
+            background-color: transparent; /* No filling */
+            border-radius: 50%;
+        }
+    
+        .highlight-finish {
+            border: 2px solid red;
+            background-color: transparent; /* No filling */
+            border-radius: 50%;
+        }
+
+        .moonboard-image {
+            display: block;
+            width: 800px; /* Set the width to match the desired size */
+            height: 1250px; /* Set the height to match the desired size */
+          }
+          
+        </style>
+    </head>
+    <body>
+        <div class="nav-buttons">
+            <a class="button" href="{{ url_for('index') }}">Home</a>
+            <a class="button" href="{{ url_for('classification') }}">Classification</a>
+        </div>
+        <h1 class="title">Moonboard AI</h1>
+        <h4 class="subtitle">Select grade to generate a climb</h4>
+        <h2>Generator</h2>
+        <p>Selected Grade: {{ grade or 'No grade selected' }}</p>
+        <form id="gradeForm" method="POST">
+            <select name="grade_dropdown">
+                <option value="" disabled selected>Select a grade</option>
+                <option value="V4">V4</option>
+                <option value="V5">V5</option>
+                <option value="V6">V6</option>
+                <option value="V7">V7</option>
+                <option value="V8">V8</option>
+                <option value="V9">V9</option>
+                <option value="V10">V10</option>
+                <option value="V10+">V10+</option>
+            </select>
+            <button type="button" onclick="submitForm()" class="export-button">Generate Climb</button>
+        </form>
+        <div class="matrix-container">
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='moonboard2016Background.jpg') }}" alt="MoonBoard" class="moonboard-image">
+                <div class="grid-container" id="grid-container">
+                    <!-- Grid items will be added dynamically by JavaScript -->
+                </div>
+            </div>
+        </div>
+        <script>
+            const rows = 18;
+            const cols = 11;
+            const gridContainer = document.getElementById('grid-container');
+            const matrix = {{ vec|tojson }};
+            const labels = {{ labels|tojson }};
+            const climb = {{ climb|tojson }};
+        
+            function createGrid(matrix, labels, climb) {
+                gridContainer.innerHTML = ''; // Clear existing grid items if any
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-item';
+        
+                        const cellLabel = `${String.fromCharCode(65 + col)}${rows - row}`;
+                        const labelIndex = climb.indexOf(cellLabel);
+        
+                        if (labelIndex !== -1) {
+                            const label = labels[labelIndex];
+                            if (label === 'starting hold') {
+                                cell.classList.add('highlight-start');
+                            } else if (label === 'intermediate hold') {
+                                cell.classList.add('highlight-intermediate');
+                            } else if (label === 'finish hold') {
+                                cell.classList.add('highlight-finish');
+                            }
+                        }
+                        gridContainer.appendChild(cell);
+                    }
+                }
+            }
+        
+            createGrid(matrix, labels, climb);
+        
+            function submitForm() {
+                document.getElementById('gradeForm').submit();
+            }
+        </script>
+    </body>
+    </html>

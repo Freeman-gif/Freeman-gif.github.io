@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoonBoard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            background-color: #F5F7F8;
+            color: #45474B;
+            font-family: Arial, sans-serif;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 20px; /* Adjust this value to increase/decrease space from the top */
+            left: 20px; /* Space from the left edge */
+            font-size: 20px;
+        }
+
+        .nav-buttons a {
+            background-color: #F5F7F8; /* Button color */
+            color: #45474B;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 5px; /* Space between buttons */
+        }
+
+        .predicted-grade {
+            margin-top: 20px;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #45474B;
+        }
+
+        .export-button {
+            display: block;
+            margin: 0 auto;
+            margin-top: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            background-color:#45474B;/* Customize the button color as needed */
+            color: #F5F7F8;
+            cursor: pointer;
+        }
+
+        .export-button:hover {
+            background-color: #d5d522; /* Customize the hover color as needed */
+        }
+
+        .title {
+            margin-bottom: -20px;
+            margin-top: 100px;
+            text-align: center;
+            font-size: 75px;
+            color: #d5d522;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: #d5d522;
+        }
+
+        .constraints {
+            position: absolute;
+            font-weight: bold;
+            font-size: 20px;
+            top: 310px;
+            left: 20px;
+            background-color: #45474B;
+            padding: 15px;
+            border-radius: 10px;
+            width: 250px; /* Adjust width as needed */
+        }
+
+        .constraints ul {
+            list-style-type: disc;
+            padding-left: 20px; /* Adjust padding for list items */
+            margin: 0;
+        }
+
+        .chart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .highlight-green {
+            background-color: green;
+        }
+        .highlight-blue {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-buttons">
+        <a class="button" href="{{ url_for('index') }}">Home</a>
+        <a class="button" href="{{ url_for('classification') }}">Classification</a>
+    </div>
+    <h1 class="title"> Moonboard AI </h1>
+    <h4 class="subtitle"> Select grade to generate a climb</h4>
+    <h2>Generator</h2>
+    <p>Selected Grade: {{ grade or 'No grade selected' }}</p>
+    <form id="gradeForm" method="POST">
+        <select name="grade_dropdown">
+            <option value="" disabled selected>Select a grade</option> 
+            <option value="V4">V4</option>
+            <option value="V5">V5</option>
+            <option value="V6">V6</option>
+            <option value="V7">V7</option>
+            <option value="V8">V8</option>
+            <option value="V9">V9</option>
+            <option value="V10">V10</option>
+            <option value="V10+">V10+</option>
+        </select>
+        <button type="button" onclick="submitForm()" class="export-button">Generate Climb</button>
+    </form>
+    <div id="chart" class="chart"></div>
+    <script>
+        function submitForm() {
+            document.getElementById('gradeForm').submit();
+        }
+
+        function plotGeneratedClimb(climb, labels, imgPath) {
+            const width = 750;
+            const height = 500;
+            const h_incpt = 93.3;
+            const h_scalar = 50;
+            const v_incpt = 63.5;
+            const v_scalar = 50;
+
+            const holds = [];
+            for (let row = 0; row < 18; row++) {
+                for (let col = 0; col < 11; col++) {
+                    const hold_id = String.fromCharCode(65 + col) + (row + 1);
+                    const x = h_incpt + h_scalar * col;
+                    const y = v_incpt + v_scalar * row;
+                    holds.push({ id: hold_id, x: x, y: y });
+                }
+            }
+
+            const svg = d3.select("#chart").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            svg.append("image")
+                .attr("xlink:href", imgPath)
+                .attr("width", width)
+                .attr("height", height);
+
+            holds.forEach(function(hold) {
+                const index = climb.indexOf(hold.id);
+                if (index !== -1) {
+                    const label = labels[index];
+                    const color = label === 'starting hold' ? 'green' :
+                                  label === 'intermediate hold' ? 'blue' : 'red';
+
+                    svg.append("circle")
+                        .attr("cx", hold.x)
+                        .attr("cy", hold.y)
+                        .attr("r", 10)
+                        .attr("stroke", color)
+                        .attr("stroke-width", 2.5)
+                        .attr("fill", "none");
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if climb and labels %}
+            const climb = {{ climb|tojson }};
+            const labels = {{ labels|tojson }};
+            const imgPath = "{{ url_for('static', filename='generate.jpeg') }}";
+            plotGeneratedClimb(climb, labels, imgPath);
+            {% endif %}
+        });
+    </script>
+</body>
+</html>
