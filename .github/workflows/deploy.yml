@@ -26,16 +26,16 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/ml-app:latest .
+        docker build -t gcr.io/climb-427107/ml-app:latest .
 
     - name: Push Docker image to Container Registry
       run: |
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/ml-app:latest
+        docker push gcr.io/climb-427107/ml-app:latest
 
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy ml-app \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/ml-app:latest \
+          --image gcr.io/climb-427107/ml-app:latest \
           --platform managed \
           --region us-central1 \
           --memory 2Gi \
