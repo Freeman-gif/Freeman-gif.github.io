@@ -194,6 +194,8 @@
 
         const selectedPositions = [];
         
+        let firstSelected = null; // Track the first selected hold
+
         function handleCellClick(rowIndex, colIndex) {
             if (!matrix[rowIndex][colIndex].selectable) return;
 
@@ -209,15 +211,33 @@
                 matrix[rowIndex][colIndex].selected = false;
                 const cell = document.getElementById(`cell-${rowIndex}-${colIndex}`);
                 cell.style.backgroundColor = 'transparent';
+                cell.style.opacity = '1'; // Reset opacity when deselected
                 const index = selectedPositions.findIndex(pos => pos.row === rowIndex && pos.col === colIndex);
                 if (index !== -1) selectedPositions.splice(index, 1);
+
+                // Update the firstSelected if the deselected cell was the first hold
+                if (firstSelected && firstSelected.row === rowIndex && firstSelected.col === colIndex) {
+                    firstSelected = selectedPositions[0] || null;
+                }
             } else {
+                // Set the firstSelected only if it hasn't been set yet
+                if (!firstSelected) {
+                    if (rowIndex < 10) {
+                        alert('The first hold must be at or below the 8th row.');
+                        return;
+                    }
+                    firstSelected = { row: rowIndex, col: colIndex };
+                }
+
                 matrix[rowIndex][colIndex].selected = true;
                 const cell = document.getElementById(`cell-${rowIndex}-${colIndex}`);
-                cell.style.backgroundColor = totalSelected === 0 ? 'green' : (totalSelected === 14 ? 'red' : 'blue');
+                cell.style.backgroundColor = 'blue'; // Set the color to blue
+                cell.style.opacity = '0.5'; // Set opacity to 50% when selected
                 selectedPositions.push({ row: rowIndex, col: colIndex });
             }
         }
+
+
 
         function exportPositions() {
             if (selectedPositions.length < 4) {

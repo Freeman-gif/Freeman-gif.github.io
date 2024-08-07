@@ -13,14 +13,22 @@
             background-color: #F5F7F8;
             color: #45474B;
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ensure the body takes the full height of the viewport */
+            margin: 0;
         }
+
         .image-container {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-left: 50px; /* Adjust this value to move the container to the right */
-          }
+        }
+
         .nav-buttons {
             position: absolute;
             top: 20px; /* Adjust this value to increase/decrease space from the top */
@@ -51,13 +59,14 @@
             display: block;
             margin: 0 auto;
             margin-top: 25px;
+            margin-bottom: 15px;
             padding: 10px 20px;
             font-size: 16px;
             font-weight: bold;
             text-align: center;
             border: none;
             border-radius: 5px;
-            background-color:#45474B;/* Customize the button color as needed */
+            background-color: #45474B; /* Customize the button color as needed */
             color: #F5F7F8;
             cursor: pointer;
         }
@@ -104,7 +113,9 @@
             background-color: transparent;
             flex-direction: column;
             height: 100vh; /* Full height of the viewport */
-          }
+            margin-top: 25px;
+        }
+
         .grid-container {
             position: absolute;
             background-color: transparent;
@@ -118,10 +129,9 @@
             grid-template-columns: repeat(11, 1fr);
             margin-left: 65px;
             margin-top: 25px;
-          
-          }
+        }
 
-          .grid-item {
+        .grid-item {
             width: 100%;
             height: 100%;
             background-color: transparent;
@@ -133,19 +143,19 @@
         }
 
         .highlight-start {
-            border: 2px solid green;
+            border: 3px solid green;
             background-color: transparent; /* No filling */
             border-radius: 50%;
         }
-    
+
         .highlight-intermediate {
-            border: 2px solid blue;
+            border: 3px solid blue;
             background-color: transparent; /* No filling */
             border-radius: 50%;
         }
-    
+
         .highlight-finish {
-            border: 2px solid red;
+            border: 3px solid red;
             background-color: transparent; /* No filling */
             border-radius: 50%;
         }
@@ -154,20 +164,36 @@
             display: block;
             width: 800px; /* Set the width to match the desired size */
             height: 1250px; /* Set the height to match the desired size */
-          }
-          
-        </style>
-    </head>
-    <body>
-        <div class="nav-buttons">
-            <a class="button" href="{{ url_for('index') }}">Home</a>
-            <a class="button" href="{{ url_for('classification') }}">Classification</a>
-        </div>
+        }
+
+        .text-div {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sub-button-text {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <a class="button" href="{{ url_for('index') }}">Home</a>
+        <a class="button" href="{{ url_for('classification') }}">Classifier</a>
+    </div>
+    <div class="text-div">
         <h1 class="title">Moonboard AI</h1>
         <h4 class="subtitle">Select grade to generate a climb</h4>
-        <h2>Generator</h2>
-        <p>Selected Grade: {{ grade or 'No grade selected' }}</p>
         <form id="gradeForm" method="POST">
+            <button type="button" onclick="submitForm()" class="export-button">Generate Climb</button>
+            <p class="sub-button-text">Selected Grade: {{ grade or 'No grade selected' }}</p>
             <select name="grade_dropdown">
                 <option value="" disabled selected>Select a grade</option>
                 <option value="V4">V4</option>
@@ -179,8 +205,8 @@
                 <option value="V10">V10</option>
                 <option value="V10+">V10+</option>
             </select>
-            <button type="button" onclick="submitForm()" class="export-button">Generate Climb</button>
         </form>
+    </div>
         <div class="matrix-container">
             <div class="image-container">
                 <img src="{{ url_for('static', filename='moonboard2016Background.jpg') }}" alt="MoonBoard" class="moonboard-image">
