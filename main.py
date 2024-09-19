@@ -63,6 +63,7 @@ def generator():
             hard_pred = int(soft_pred.argmax())
             out_conv = OutputConversion()
             predicted_grade = out_conv.convert(hard_pred)
+            print(predicted_grade)
 
             if predicted_grade == input_grade:
                 print(f"predicted_grade:{predicted_grade}")
@@ -83,12 +84,6 @@ def generator():
 
     return render_template('generator+.html', grade=input_grade, vec=vectors, climb=climb, labels=labels)
 
-
-
-
-
-
-
 @app.route('/api/save-positions', methods=['POST'])
 def save_positions():
     global selected_positions
@@ -104,7 +99,7 @@ def save_positions():
         indices.append(idx)
 
     position_ohe = np.zeros(198)
-    for idx in indices: 
+    for idx in indices:
         position_ohe[idx] += 1
 
     model_input = torch.tensor(position_ohe).to(torch.float32).flatten() 

@@ -5,8 +5,8 @@ class OutputConversion:
     def __init__(self):
         self.grade_mapping = {
             0: 'V4', 1: 'V5', 2: 'V6', 3: 'V7', 
-            4: 'V8', 5: 'V9', 6: 'V10+', 7: 'V11',
-            8: 'V12', 9: 'V13'
+            4: 'V8', 5: 'V9', 6: 'V10', 7: 'V10+',
+            8: 'V10+', 9: 'V10+'
         }
 
     def convert(self, output):
