@@ -6,14 +6,19 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import torch
 from dotenv import load_dotenv
-from src.model import ClimbNet
+from src.model import load_model
 from src.generator import ClimbGenerator
 from src.utils import OutputConversion
 
 load_dotenv()
 app = Flask(__name__, template_folder='templates')
 CORS(app)
+
+WEIGHTS_FILEPATH = "src/climbnet_weights.pth"
+clf = load_model(WEIGHTS_FILEPATH)
+out_conv = OutputConversion()
 selected_positions = []
+grade_output = None
 
 
 @app.route('/')
@@ -50,18 +55,12 @@ def generator():
         level = grade_to_level[input_grade]
 
         generator = ClimbGenerator(level)
-        clf = ClimbNet()
-        weights_filepath = "src/climbnet_weights.pth"
-        clf.load_state_dict(torch.load(weights_filepath))
-
-        clf.eval()
         while True:
             climb, labels, vector = generator.generate_climb()
             vector = torch.tensor(vector).to(torch.float32).flatten()
             with torch.no_grad():
                 soft_pred = clf(vector)
             hard_pred = int(soft_pred.argmax())
-            out_conv = OutputConversion()
             predicted_grade = out_conv.convert(hard_pred)
             print(predicted_grade)
 
@@ -102,17 +101,11 @@ def save_positions():
     for idx in indices:
         position_ohe[idx] += 1
 
-    model_input = torch.tensor(position_ohe).to(torch.float32).flatten() 
+    model_input = torch.tensor(position_ohe).to(torch.float32).flatten()
 
-    model = ClimbNet()
-    weights_filepath = "src/climbnet_weights.pth"
-    model.load_state_dict(torch.load(weights_filepath))
-
-    model.eval()
     with torch.no_grad():
-        soft_pred = model(model_input)    
+        soft_pred = clf(model_input)
     hard_pred = int(soft_pred.argmax())
-    out_conv = OutputConversion()
     grade_output = out_conv.convert(hard_pred)
     # print('Received positions:', selected_positions)
     # print(position_ohe)
@@ -134,5 +127,5 @@ def get_prediction():
     return render_template('classification.html', pred=grade_output)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))

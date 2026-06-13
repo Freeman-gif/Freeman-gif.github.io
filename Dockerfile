@@ -10,11 +10,9 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 8080 available to the world outside this container
+# Render and other hosts set PORT at runtime
 EXPOSE 8080
 
-# Define environment variable
 ENV PORT=8080
 
-# Run main.py when the container launches
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "main:app"]
+CMD gunicorn -w 1 -b 0.0.0.0:${PORT:-8080} main:app

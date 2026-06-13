@@ -22,12 +22,17 @@ class ClimbNet(nn.Module):
         x = self.dropout3(F.relu(self.bn3(self.lin3(x))))
         x = self.lin4(x)
         return x
-    
-file_path = 'src/climbnet_weights.pth'
-model = ClimbNet()
-model.load_state_dict(torch.load(file_path))
+
+
+def load_model(weights_filepath='src/climbnet_weights.pth'):
+    model = ClimbNet()
+    model.load_state_dict(torch.load(weights_filepath, map_location='cpu'))
+    model.eval()
+    return model
+
 
 if __name__ == '__main__':
+    model = load_model()
     test_input = torch.randint(low=0, high=2, size=(1, 18*11))
     test_input = test_input.to(torch.float32).flatten()
 
